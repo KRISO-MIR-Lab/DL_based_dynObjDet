@@ -1,1 +1,3 @@
-src/PointPillars
+# src/PointPillars
+src/PointPillars/__pycache__/
+src/PointPillars/*.log
