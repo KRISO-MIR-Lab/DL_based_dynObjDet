@@ -12,7 +12,7 @@ git clone https://github.com/PyoSH/dynObjDet.git
 cd dynObjDet
 git submodule update --init --recursive
 
-chmod +x src/preciction.py
+chmod +x src/prediction.py
 ```
 2. build with catkin_make or build.
 3. rosrun dynObjDet prediction.py
