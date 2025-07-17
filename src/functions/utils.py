@@ -21,7 +21,10 @@ def pointcloud2_to_numpy(msg):
         '''
         rawData = pc2.read_points(msg, field_names=("x", "y", "z", "intensity"), skip_nans=True)
         points = np.array(list(rawData), dtype=np.float32)
-        
+        points = points.reshape(-1, 4)
+        # points = np.array(rawData, dtype=np.float32)
+        print(f'points type: {type(points)} & size: {np.size(points)}')
+
         return points
 
 def preprocess_points(points):
@@ -31,7 +34,7 @@ def preprocess_points(points):
     # 좌표 범위 필터링 (예: KITTI 기준)
     x_range = [0, 70]
     y_range = [-40, 40]
-    z_range = [-3, 1]
+    z_range = [-3, 2]
     
     mask = (
         (points[:, 0] >= x_range[0]) & (points[:, 0] <= x_range[1]) &
