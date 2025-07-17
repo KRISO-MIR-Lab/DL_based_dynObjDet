@@ -13,14 +13,21 @@ class PointPillarNode:
     def __init__(self):
         print("Node started")
         # 모델 초기화
-        self.model_path = '/root/catkin_ws/src/dynObjDet/src/PointPillars/pretrained/epoch_160.pth'
-        self.model = utils.load_pointpillars_model(self.model_path)
-        
         self.CLASSES = {
             'Pedestrian': 0, 
             'Cyclist': 1, 
             'Car': 2
             }
+        
+        self.is_cuda = torch.cuda.is_available()
+        self.device = None
+        if self.is_cuda==True:
+            self.device = torch.device("cuda")
+        else:
+            self.device = torch.device("cpu")
+
+        self.model_path = '/root/catkin_ws/src/dynObjDet/src/PointPillars/pretrained/epoch_160.pth'
+        self.model = utils.load_pointpillars_model(self.device, self.CLASSES, self.model_path)       
         
         # ROS 설정
         rospy.init_node('dynObjDet_node')
@@ -38,14 +45,20 @@ class PointPillarNode:
         
         # 2. 모델 입력 형식으로 전처리
         pc_torch = utils.preprocess_points(points)
-        model_input = [pc_torch]
+        print(f"pc_torch type: {type(pc_torch)}")
+
+        # model_input = [pc_torch]
+        model_input = pc_torch.to(self.device)
+        print(f"model_input type: {type(model_input)}")
 
         # 3. 모델 추론
-        results = None
+        results = None        
+        print(f"before model predict")
         self.model.eval()
         with torch.no_grad():
-            results = self.model(batched_pts=model_input, mode='test')[0]    
-        
+            results = self.model(batched_pts=[model_input], mode='test')[0]
+
+        print(f"result type: {type(results)}, {results}")
         # 4. 결과를 커스텀 메시지로 변환
         currTime = rospy.Time.now()
         detection_msg = utils.results_to_message(results, self.CLASSES, currTime)
