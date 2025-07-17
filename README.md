@@ -5,9 +5,11 @@ simple program for detect 3D objects in oudoor using [torch implementation of Po
 
 ## How to use
 1. installation
-```
+```bash
 cd catkin_ws/src
-git clone
+git clone https://github.com/PyoSH/dynObjDet.git
+
+cd dynObjDet
 git submodule update --init --recursive
 
 chmod +x src/preciction.py
