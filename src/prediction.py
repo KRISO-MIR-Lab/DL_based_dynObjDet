@@ -33,12 +33,24 @@ class PointPillarNode:
         rospy.init_node('dynObjDet_node')
         print("Node initialized")
 
-        self.sub = rospy.Subscriber('/ouster/points', PointCloud2, self.callback)
+        # self.sub = rospy.Subscriber('/ouster/points', PointCloud2, self.callback)
+        self.sub = rospy.Subscriber('/velodyne_points', PointCloud2, self.callback)
         self.pub = rospy.Publisher('/detected_objects', DetectedObjectArray, queue_size=10)
         self.vizPub = rospy.Publisher('pointpillar/markers', MarkerArray, queue_size=10)
     
     def callback(self, msg):
         print("Node - callback start")
+        print("=== Point Cloud Debug Info ===")
+        points = utils.pointcloud2_to_numpy(msg)
+        print(f"Points shape: {points.shape}")
+        print(f"Intensity range: {points[:, 3].min():.3f} ~ {points[:, 3].max():.3f}")
+        print(f"Point count before filtering: {len(points)}")
+        
+        pc_torch = utils.preprocess_points(points)
+        print(f"Point count after filtering: {len(pc_torch)}")
+    
+        if len(pc_torch) < 100:  # 너무 적은 포인트
+            print("WARNING: Very few points after filtering!")
 
         # 1. PointCloud2 → numpy 변환
         points = utils.pointcloud2_to_numpy(msg)
@@ -61,8 +73,8 @@ class PointPillarNode:
         print(f"result type: {type(results)}, {results}")
         # 4. 결과를 커스텀 메시지로 변환
         currTime = rospy.Time.now()
-        detection_msg = utils.results_to_message(results, self.CLASSES, currTime)
-        vizMarker = utils.results_to_markers(results, self.CLASSES, currTime)
+        detection_msg = utils.results_to_message(results, self.CLASSES, currTime, 'velodyne')
+        vizMarker = utils.results_to_markers(results, self.CLASSES, currTime, 'velodyne')
         
         # 5. 발행
         
