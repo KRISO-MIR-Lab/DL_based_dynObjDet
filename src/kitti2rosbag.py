@@ -11,8 +11,9 @@ import rospy
 rospy.init_node('kitti2bag_writer', anonymous=True)
 
 print(f"start")
-velodyne_dir = '/root/KITTI/testing/velodyne'
-bag = rosbag.Bag('kitti_testing_velodyne.bag', 'w')
+velodyne_dir = '/root/KITTI/velo_test'
+# velodyne_dir = '/root/KITTI/testing/velodyne'
+bag = rosbag.Bag('kitti_test.bag', 'w')
 files = sorted(os.listdir(velodyne_dir))
 frame_id = 'velodyne'
 start = rospy.Time.now()

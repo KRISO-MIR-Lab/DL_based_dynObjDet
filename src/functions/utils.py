@@ -41,9 +41,20 @@ def preprocess_points(points):
         (points[:, 1] >= y_range[0]) & (points[:, 1] <= y_range[1]) &
         (points[:, 2] >= z_range[0]) & (points[:, 2] <= z_range[1])
     )
-    
+
     filtered_points = points[mask]
-    
+
+    intensity_min = filtered_points[:, 3].min()
+    intensity_max = filtered_points[:, 3].max()
+    if intensity_max > intensity_min:
+        filtered_points[:, 3] = (filtered_points[:, 3] - intensity_min) / (intensity_max - intensity_min)
+    else:
+        filtered_points[:, 3] = 0  # 혹은 모두 1로 설정도 가능
+
+    if filtered_points.shape[0] == 0:
+        # torch에서 빈 입력에 대한 처리를 원하는 대로 작성
+        return torch.empty((0, 4), dtype=torch.float32)
+
     # 모델별 전처리 (예: zhulf0804/PointPillars 기준)
     return torch.from_numpy(filtered_points).float()
 

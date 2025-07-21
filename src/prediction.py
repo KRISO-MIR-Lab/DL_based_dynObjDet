@@ -33,8 +33,8 @@ class PointPillarNode:
         rospy.init_node('dynObjDet_node')
         print("Node initialized")
 
-        # self.sub = rospy.Subscriber('/ouster/points', PointCloud2, self.callback)
-        self.sub = rospy.Subscriber('/velodyne_points', PointCloud2, self.callback)
+        self.sub = rospy.Subscriber('/ouster/points', PointCloud2, self.callback)
+        # self.sub = rospy.Subscriber('/velodyne_points', PointCloud2, self.callback)
         self.pub = rospy.Publisher('/detected_objects', DetectedObjectArray, queue_size=10)
         self.vizPub = rospy.Publisher('pointpillar/markers', MarkerArray, queue_size=10)
     
@@ -73,8 +73,11 @@ class PointPillarNode:
         print(f"result type: {type(results)}, {results}")
         # 4. 결과를 커스텀 메시지로 변환
         currTime = rospy.Time.now()
-        detection_msg = utils.results_to_message(results, self.CLASSES, currTime, 'velodyne')
-        vizMarker = utils.results_to_markers(results, self.CLASSES, currTime, 'velodyne')
+        # detection_msg = utils.results_to_message(results, self.CLASSES, currTime, 'velodyne')
+        # vizMarker = utils.results_to_markers(results, self.CLASSES, currTime, 'velodyne')
+
+        detection_msg = utils.results_to_message(results, self.CLASSES, currTime, 'os_sensor')
+        vizMarker = utils.results_to_markers(results, self.CLASSES, currTime, 'os_sensor')
         
         # 5. 발행
         
