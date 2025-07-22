@@ -20,6 +20,6 @@ chmod +x src/prediction.py
 3. rosrun dynObjDet prediction.py
 
 ## When you use
-<p align='center'>
+<p align="center">
   <img src="https://github.com/user-attachments/assets/96f5e660-604c-4971-bad2-ad7eea174faf">
 </p>
