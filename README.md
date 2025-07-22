@@ -10,9 +10,13 @@ cd catkin_ws/src
 git clone https://github.com/PyoSH/dynObjDet.git
 
 cd dynObjDet
-git submodule update --init --recursive
+cd src
+
+git clone https://github.com/zhulf0804/PointPillars.git
 
 chmod +x src/prediction.py
 ```
 2. build with catkin_make or build.
 3. rosrun dynObjDet prediction.py
+
+## When you use
