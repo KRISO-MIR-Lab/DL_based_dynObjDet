@@ -7,7 +7,16 @@ simple program for detect 3D objects in oudoor using [torch implementation of Po
 1. installation
 ```bash
 cd catkin_ws/src
-git clone https://github.com/PyoSH/dynObjDet.git
+git clone https://github.com/KRISO-MIR-Lab/DL_based_dynObjDet.git
+
+# -------------------------terminal in the container-----------------
+conda create -n test python=3.7
+conda activate test
+
+cd PointPillars/
+pip install -r requirements.txt
+python setup.py build_ext --inplace
+pip install .
 
 cd dynObjDet
 cd src
