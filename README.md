@@ -10,6 +10,7 @@ cd catkin_ws/src
 git clone https://github.com/KRISO-MIR-Lab/DL_based_dynObjDet.git
 
 # -------------------------terminal in the container-----------------
+cd DL_based_dynObjDet
 conda create -n test python=3.7
 conda activate test
 
